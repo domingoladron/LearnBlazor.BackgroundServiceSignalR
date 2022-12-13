@@ -1,0 +1,48 @@
+﻿@page "/trackmyvisit"
+@using MyBlazorServer.Configuration
+@implements IDisposable
+@inject StateContainer _stateContainer
+
+
+<h1>Track My Visit</h1>
+
+<p>Let's track if I've been here before or not</p>
+@if(_stateContainer.AmITracked)
+{
+    <h2>I'm Tracked!</h2>
+    
+} else
+{
+    <h2>I'm Not Tracked!</h2>
+}
+<h4>@_stateContainer.StateChangeString</h4>
+
+<button class="btn btn-primary" @onclick="TrackMe">@_trackButtonText</button>
+
+@code {
+
+    private string _trackButtonText = "Track My Visit";
+
+    protected override void OnInitialized()
+    {
+        _stateContainer.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _stateContainer.OnChange -= StateHasChanged;
+    }
+
+    private void TrackMe()
+    {
+        if (!_stateContainer.AmITracked)
+        {
+            _trackButtonText = "Stop Tracking me!";
+
+            _stateContainer.AmITracked = true;
+        } else {
+            _trackButtonText = "Track My Visit";
+            _stateContainer.AmITracked = false;
+        }
+    }
+}

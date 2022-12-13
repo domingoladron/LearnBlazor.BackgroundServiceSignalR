@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  myblazorserver:
+    build:
+        context: .
+        dockerfile: MyBlazorServer/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - 59458:443
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

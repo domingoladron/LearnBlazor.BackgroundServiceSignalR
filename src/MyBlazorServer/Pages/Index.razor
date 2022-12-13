@@ -1,0 +1,38 @@
+@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using MyBlazorServer.SignalR
+@using System.Globalization
+@inject NavigationManager NavigationManager
+
+<h1>Hello, dev!</h1>
+
+Wait here and the background service will say hello (via SignalR) every 5 seconds.
+
+<p style="font-weight: bold; color: darkblue">@((MarkupString)ChangingText)</p>
+
+
+@code {
+    public string ChangingText = "Wait for it...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var connection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/signalr-messaging"))
+            .Build();
+
+        connection.On<DateTime>(nameof(ISayHelloCommand.SayHelloAsync), HandleSayHelloAsync);
+
+        await connection.StartAsync();
+
+        await base.OnInitializedAsync();
+    }
+
+    private void HandleSayHelloAsync(DateTime dateTimeFired)
+    {
+        ChangingText += $"<br/>Hello from the background worker service via SignalR @ {dateTimeFired.ToString(CultureInfo.InvariantCulture)}";
+        StateHasChanged();
+    }
+
+
+
+}

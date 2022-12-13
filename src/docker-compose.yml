@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  myblazorserver:
+    image: ${DOCKER_REGISTRY-}myblazorserver
+    build:
+      context: .
+      dockerfile: MyBlazorServer/Dockerfile
+    container_name: myblazorserver
