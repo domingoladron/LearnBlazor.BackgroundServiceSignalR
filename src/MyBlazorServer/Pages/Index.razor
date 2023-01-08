@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using MyBlazorServer.SignalR
 @using System.Globalization
-@inject NavigationManager NavigationManager
 
 <h1>Hello, dev!</h1>
 
@@ -14,6 +13,7 @@ Wait here and the background service will say hello (via SignalR) every 5 second
 @code {
     public string ChangingText = "Wait for it...";
 
+    [Inject] NavigationManager NavigationManager { get; set; }
     protected override async Task OnInitializedAsync()
     {
         var connection = new HubConnectionBuilder()
